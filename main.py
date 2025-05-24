@@ -53,3 +53,23 @@ if page == "สรุปภาพรวม":
 
     st.subheader("📊 ความสัมพันธ์ระหว่างราคาปิดกับ SET Index")
     st.write(df[["ราคาปิด", "SET Index"]].corr())
+    elif page == "แนวโน้มราคาปิด":
+    st.subheader("📉 แนวโน้มราคาปิด (Linear Regression)")
+    from sklearn.linear_model import LinearRegression
+    import numpy as np
+
+    X = df_sorted["วันที่"].map(pd.Timestamp.toordinal).values.reshape(-1, 1)
+    y = df_sorted["ราคาปิด"].values
+    model = LinearRegression()
+    model.fit(X, y)
+    trend = model.predict(X)
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(df_sorted["วันที่"], y, label="ราคาปิดจริง")
+    ax.plot(df_sorted["วันที่"], trend, linestyle="--", color="red", label="แนวโน้ม (Linear Regression)")
+    ax.set_title("แนวโน้มราคาปิด CPALL")
+    ax.set_xlabel("วันที่")
+    ax.set_ylabel("ราคาปิด (บาท)")
+    ax.legend()
+    ax.grid(True)
+    st.pyplot(fig)
