@@ -84,3 +84,17 @@ if page == "สรุปภาพรวม":
     ax2.legend()
     ax2.grid(True)
     st.pyplot(fig2)
+    elif page == "Moving Average":
+    st.subheader("📈 ค่าเฉลี่ยเคลื่อนที่ (Moving Average)")
+    window = st.slider("เลือกจำนวนวัน", 3, 30, 7)
+    df_sorted["MA"] = df_sorted["ราคาปิด"].rolling(window=window).mean()
+
+    fig3, ax3 = plt.subplots(figsize=(12, 6))
+    ax3.plot(df_sorted["วันที่"], df_sorted["ราคาปิด"], label="ราคาปิด")
+    ax3.plot(df_sorted["วันที่"], df_sorted["MA"], label=f"MA {window} วัน", color="orange")
+    ax3.set_title(f"ราคาปิดและค่าเฉลี่ย {window} วัน")
+    ax3.set_xlabel("วันที่")
+    ax3.set_ylabel("ราคาปิด (บาท)")
+    ax3.legend()
+    ax3.grid(True)
+    st.pyplot(fig3)
